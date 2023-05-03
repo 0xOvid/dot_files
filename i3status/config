@@ -1,0 +1,25 @@
+general {
+	output_format = "i3bar"
+	colors = false
+	markup = pango
+	interval = 1
+}
+
+order += "ethernet tun0"
+order += "ethernet eth0"
+order += "tztime local"
+
+ethernet eth0 {
+        format_up = "<span foreground='#e2b1d4'> E: %ip (%speed)</span>"
+        format_down = "<span foreground='#91c9c4'>E: down</span>"
+}
+
+ethernet tun0 {
+        format_up = "<span foreground='#dd83a1'> tun0: %ip (%speed)</span>"
+        format_down = "<span foreground='#91c9c4'>tun0: down</span>"
+}
+
+tztime local {
+	format = "<span foreground='#ffffff'>%Y-%m-%d %H:%M:%S %Z</span>"
+	timezone = "Europe/Copenhagen"
+}
