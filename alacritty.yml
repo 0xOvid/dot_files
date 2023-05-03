@@ -1,7 +1,0 @@
-### set colour scheme
-import:
- - ~/.config/alacritty/themes/themes/nord.yaml
-
-### copy settings
-selection:
-  save_to_clipboard: true
