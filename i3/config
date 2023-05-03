@@ -187,11 +187,15 @@ bindsym $mod+r mode "resize"
 # finds out, if available)
 #bar {
 #        status_command i3status
+#	colors {
+#		background #0a1124
+#		statusline #0a1124
+#	}
 #}
 
 ### set colour on selected window
 # class                 border  backgr. text    indicator child_border
-client.focused          #ffffff #ffffff #000000 #ffffff   #ffffff
+client.focused          #712d41 #712d41 #edc29a #712d41   #712d41
 client.focused_inactive #333333 #5f676a #ffffff #484e50   #5f676a
 client.unfocused        #333333 #222222 #888888 #292d2e   #222222
 client.urgent           #2f343a #900000 #ffffff #900000   #900000
@@ -199,17 +203,18 @@ client.placeholder      #000000 #0c0c0c #ffffff #000000   #0c0c0c
 
 ### set colour of the window icon on statusbar
 bar {
-    colors {
-        background #000000
-        statusline #ffffff
-        separator #666666
-	# class		   border  backgr. text
-        focused_workspace  #ffffff #ffffff #000000
-        active_workspace   #333333 #5f676a #ffffff
-        inactive_workspace #333333 #222222 #888888
-        urgent_workspace   #2f343a #900000 #ffffff
-        binding_mode       #2f343a #900000 #ffffff
-    }
+	status_command i3status
+	colors {
+        	background #0a1124
+	        statusline #ffffff
+        	separator #666666
+		# class		   border  backgr. text
+        	focused_workspace  #222222 #f35743 #000000
+	        active_workspace   #333333 #5f676a #ffffff
+        	inactive_workspace #333333 #222222 #888888
+	        urgent_workspace   #2f343a #900000 #ffffff
+        	binding_mode       #2f343a #900000 #ffffff
+	}
 }
 
 
