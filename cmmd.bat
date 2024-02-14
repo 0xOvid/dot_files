@@ -1,1 +1,1 @@
-whoami /all > C:\users\public\downloads\log.gg
+whoami /all > C:\log.gg
